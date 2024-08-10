@@ -20,53 +20,34 @@ export class UserController {
             department,
         };
 
-        try {
-            UserSchemaValidator.create(user);
-            const newUser = await this.userUseCases.create(user);
+        UserSchemaValidator.create(user);
+        const newUser = await this.userUseCases.create(user);
 
-            res.status(201).json(newUser);
-        } catch (error) {
-            res.status(400).json({ message: (error as Error).message });
-        }
+        res.status(201).json(newUser);
     };
 
     public findById = async (req: Request, res: Response) => {
         const { id } = req.params;
 
-        try {
-            UserSchemaValidator.isUUID(id)
-            const user = await this.userUseCases.findById(id);
-            if (!user)
-                return res.status(404).json({ message: 'User not found' });
+        UserSchemaValidator.isUUID(id);
+        const user = await this.userUseCases.findById(id);
 
-            return res.status(200).json(user);
-        } catch (error) {
-            res.status(400).json({ message: (error as Error).message });
-        }
+        return res.status(200).json(user);
     };
 
     public findAll = async (req: Request, res: Response) => {
-        try {
-            const users = await this.userUseCases.findAll();
-            res.status(200).json(users);
-        } catch (error) {
-            res.status(400).json({ message: (error as Error).message });
-        }
+        const users = await this.userUseCases.findAll();
+        return res.status(200).json({ data: users });
     };
 
     public update = async (req: Request, res: Response) => {
         const { id } = req.params;
         const data = req.body;
 
-        try {
-            UserSchemaValidator.update(data);
-            const user = await this.userUseCases.update(id, data);
-            if (!user)
-                return res.status(404).json({ message: 'User not found' });
+        UserSchemaValidator.update(data);
+        const user = await this.userUseCases.update(id, data);
+        if (!user) return res.status(404).json({ message: 'User not found' });
 
-            return res.status(200).json(user);
-        } catch (error) {
-            res.status(400).json({ message: (error as Error).message });
-        }
+        return res.status(200).json(user);
     };
 }

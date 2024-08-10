@@ -1,3 +1,4 @@
+import { DomainExceptions } from '../../../common/domain/exceptions';
 import { Utility } from '../../../common/utility';
 import { UserPrimitiveData, CreateUserDto, User } from '../domain/user.entity';
 import { UserRepository } from '../domain/user.repository';
@@ -15,9 +16,9 @@ export class UserUseCases {
         return newUser.toValue();
     };
 
-    public findById = async (id: string): Promise<UserPrimitiveData | null> => {
+    public findById = async (id: string): Promise<UserPrimitiveData> => {
         const user = await this.repository.findById(id);
-        if (!user) return null;
+        if (!user) throw new DomainExceptions(`User with id = ${id}, not found!`, 404);
 
         return user;
     };
@@ -26,13 +27,13 @@ export class UserUseCases {
         return await this.repository.findAll();
     };
 
-    public update = async (id: string, data: Partial<CreateUserDto>): Promise<UserPrimitiveData | null> => {
+    public update = async (id: string, data: Partial<CreateUserDto>): Promise<UserPrimitiveData> => {
         const user = await this.repository.findById(id);
 
-        if (!user) return null;
+        if (!user) throw new DomainExceptions(`User with id = ${id}, not found!`, 404);
 
         const userUpdated = await this.repository.update(id, data);
-        if (!userUpdated) return null;
+        if (!userUpdated) throw new DomainExceptions('Updated not processed!', 409);
 
         return userUpdated;
     }
