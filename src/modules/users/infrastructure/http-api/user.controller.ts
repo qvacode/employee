@@ -46,7 +46,6 @@ export class UserController {
 
         UserSchemaValidator.update(data);
         const user = await this.userUseCases.update(id, data);
-        if (!user) return res.status(404).json({ message: 'User not found' });
 
         return res.status(200).json(user);
     };

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userController } from "../instances";
+import { userController } from "../dependencies-injection";
 import { asyncHandler } from "../../../../common/infrastructure/app.middleware";
 
 export const userRouter = Router();
