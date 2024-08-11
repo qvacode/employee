@@ -28,9 +28,7 @@ export class UserUseCases {
     };
 
     public update = async (id: string, data: Partial<CreateUserDto>): Promise<UserPrimitiveData> => {
-        const user = await this.repository.findById(id);
-
-        if (!user) throw new DomainExceptions(`User with id = ${id}, not found!`, 404);
+        await this.findById(id);
 
         const userUpdated = await this.repository.update(id, data);
         if (!userUpdated) throw new DomainExceptions('Updated not processed!', 409);
