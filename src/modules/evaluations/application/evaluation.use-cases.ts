@@ -2,6 +2,7 @@ import { EvaluationRepository } from "../domain/evaluation.repository";
 import { CreateEvaluationDto, Evaluation, EvaluationPrimitiveData } from "../domain/evaluation.entity";
 import { DomainExceptions } from "../../../common/domain/exceptions";
 import { userUseCases } from "../../users/infrastructure/dependencies-injection";
+import { eventEmitter, Events } from "../../../common/infrastructure/events/emitter";
 
 export class EvaluationUseCases {
     constructor(private readonly repository: EvaluationRepository) {}
@@ -10,6 +11,7 @@ export class EvaluationUseCases {
         const evaluation = Evaluation.create(data);
         await this.repository.create(evaluation);
 
+        eventEmitter.emit(Events.NEW_EVALUATION, evaluation.toValue())
         return evaluation.toValue()
     }
     
@@ -38,16 +40,8 @@ export class EvaluationUseCases {
         
         const submittedEvaluation = await this.repository.submit(id);
         if (!submittedEvaluation) throw new DomainExceptions('Submit evaluation not processed!', 409);
-
-        return submittedEvaluation
-    }
-    
-    public async assignEvaluator(id: string): Promise<EvaluationPrimitiveData> {
-        await this.findById(id);
         
-        const evaluatorAssigned =  await this.repository.assignEvaluator(id);
-        if(!evaluatorAssigned) throw new DomainExceptions('Assign evaluator not processed!', 409)
-
-        return evaluatorAssigned
+        eventEmitter.emit(Events.SUBMIT, submittedEvaluation)
+        return submittedEvaluation
     }
 }

@@ -1,4 +1,5 @@
 import { DomainExceptions } from "../../../common/domain/exceptions";
+import { eventEmitter, Events } from "../../../common/infrastructure/events/emitter";
 import { CreateQuestionDto, Question, QuestionPrimitiveData } from "../domain/question.entity";
 import { QuestionRepository } from "../domain/question.repository";
 
@@ -34,6 +35,11 @@ export class QuestionUseCases {
         const question = await this.questionRepository.qualify(id, score)
         if(!question) throw new DomainExceptions(`Question with id = ${id} not found!`, 404)
 
+        eventEmitter.emit(Events.QUALIFIED, question.id)
         return question
+    }
+
+    public findByEvaluation = async (evaluationId: string): Promise<QuestionPrimitiveData[]> => {
+        return await this.questionRepository.findByEvaluation(evaluationId)
     }
 }
