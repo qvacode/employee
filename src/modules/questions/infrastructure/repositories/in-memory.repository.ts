@@ -20,6 +20,10 @@ export class QuestionInMemoryRepository implements QuestionRepository {
         return question
     }
 
+    async findByEvaluation(evaluationId: string): Promise<QuestionPrimitiveData[]> {
+        return this.questions.filter(question => question.evaluationId === evaluationId)
+    }
+
     private async update(id: string, data: Partial<QuestionPrimitiveData>): Promise<QuestionPrimitiveData | null> {
         const questionIndex = this.questions.findIndex((question) => question.id === id);
 

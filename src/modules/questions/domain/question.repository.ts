@@ -6,4 +6,5 @@ export abstract class QuestionRepository {
     abstract findAll(): Promise<QuestionPrimitiveData [] | []>
     abstract answer(id: string, answer: string): Promise<QuestionPrimitiveData | null>
     abstract qualify(id: string, score: number): Promise<QuestionPrimitiveData | null>
+    abstract findByEvaluation(evaluationId: string): Promise<QuestionPrimitiveData[]>
 }

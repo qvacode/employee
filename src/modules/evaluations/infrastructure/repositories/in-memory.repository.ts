@@ -45,12 +45,7 @@ export class EvaluationsInMemoryRepository implements EvaluationRepository {
     }
 
     async submit(id: string): Promise<EvaluationPrimitiveData | null> {
-        const evaluation = await this.findById(id);
-        if (!evaluation) return null;
-
-        evaluation.status = EvaluationStatus.COMPLETED;
-        const updatedEvaluation = await this.update(id, evaluation);
-        return updatedEvaluation;
+        return await this.assignEvaluator(id)
     }
 
     async assignEvaluator(id: string): Promise<EvaluationPrimitiveData | null> {

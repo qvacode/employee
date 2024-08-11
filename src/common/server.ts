@@ -11,6 +11,7 @@ import { evaluationRouter } from '../modules/evaluations/infrastructure/http-api
 import { questionRouter } from '../modules/questions/infrastructure/http-api/question.router';
 import { reportRouter } from '../modules/reports/infrastructure/report.router';
 import { authRouter } from '../modules/auth/infrastructure/auth.router';
+import { eventListener } from './infrastructure/events/listener';
 
 export class Server {
     private app: Express;
@@ -79,6 +80,8 @@ export class Server {
                 `🤖 -->> Server on port: ${Server.port}`,
                 `${Server.name}-${this.listen.name}`,
             );
+
+            eventListener()
         });
     }
 
