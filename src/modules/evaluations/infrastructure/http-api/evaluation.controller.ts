@@ -4,6 +4,7 @@ import { EvaluationUseCases } from "../../application/evaluation.use-cases";
 import { CreateEvaluationDto } from '../../domain/evaluation.entity';
 import { EvaluationSchemaValidator } from "./evaluation.schema-validator";
 import { userUseCases } from "../../../users/infrastructure/dependencies-injection";
+import { SchemaValidator } from "../../../../common/infrastructure/schema-validator";
 
 export class EvaluationController {
     constructor(private readonly evaluationUseCases: EvaluationUseCases) {}
@@ -27,7 +28,7 @@ export class EvaluationController {
     public findById = async (req: Request, res: Response) => {
         const { id } = req.params
 
-        EvaluationSchemaValidator.isUUID(id)
+        SchemaValidator.isUUID(id)
         const evaluation = await this.evaluationUseCases.findById(id)
 
         return res.status(200).json(evaluation)
@@ -42,7 +43,7 @@ export class EvaluationController {
         const { id } = req.params;
         const data = req.body;
 
-        EvaluationSchemaValidator.isUUID(id)
+        SchemaValidator.isUUID(id)
         EvaluationSchemaValidator.update(data)
 
         const updatedUser = await this.evaluationUseCases.update(id, data)
@@ -53,7 +54,7 @@ export class EvaluationController {
     public submit = async (req: Request, res: Response) => {
         const { id } = req.params;
 
-        EvaluationSchemaValidator.isUUID(id)
+        SchemaValidator.isUUID(id)
         const evaluation = await this.evaluationUseCases.submit(id)
 
         return res.status(200).json(evaluation)

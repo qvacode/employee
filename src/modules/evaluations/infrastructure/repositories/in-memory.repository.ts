@@ -12,9 +12,8 @@ import { EvaluationRepository } from '../../domain/evaluation.repository';
 export class EvaluationsInMemoryRepository implements EvaluationRepository {
     private evaluations: EvaluationPrimitiveData[] = [];
 
-    async create(evaluation: Evaluation): Promise<EvaluationPrimitiveData> {
+    async create(evaluation: Evaluation): Promise<void> {
         this.evaluations.push(evaluation.toValue());
-        return evaluation.toValue()
     }
 
     async findAll(): Promise<EvaluationPrimitiveData[] | []> {
