@@ -20,20 +20,6 @@ export class EvaluationSchemaValidator {
         }
     }
 
-    public static isUUID(data: string) {
-        const schema = Joi.string().uuid({ version: 'uuidv4' })
-
-        const { error } = schema.validate(data, { abortEarly: false, allowUnknown: false });
-        if(error) {
-            const message = error.details.map((detail) => detail.message).join(', ');
-            throw new ValidationError(
-                message,
-                error.details,
-                error._original,
-            );
-        }
-    }
-
     public static update(data: Partial<CreateEvaluationDto>) {
         const schema = Joi.object<CreateEvaluationDto>({
             period: Joi.string().min(3).max(30).optional(),
