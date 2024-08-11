@@ -7,6 +7,7 @@ import { Env } from '../config/env.config';
 import { swaggerSpecs } from '../config/swagger.config';
 import { userRouter } from '../modules/users/infrastructure/http-api/user.router';
 import { errorHandler } from './infrastructure/app.middleware';
+import { evaluationRouter } from '../modules/evaluations/infrastructure/http-api/evaluation.router';
 
 export class Server {
     private app: Express;
@@ -57,7 +58,8 @@ export class Server {
     private routes() {
         this.app.use('/api/v1/doc', serve, setup(swaggerSpecs));
         // ToDo: agregamos las rutas de la app aquí
-        this.app.use('/api/v1/user', userRouter);
+        this.app.use('/api/v1/employees', userRouter);
+        this.app.use('/api/v1/evaluations', evaluationRouter);
 
         // !VALIDACIÓN DE ERRORES
         this.app.use(errorHandler)
