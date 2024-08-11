@@ -6,8 +6,11 @@ import { join } from 'path';
 import { Env } from '../config/env.config';
 import { swaggerSpecs } from '../config/swagger.config';
 import { userRouter } from '../modules/users/infrastructure/http-api/user.router';
-import { errorHandler } from './infrastructure/app.middleware';
+import { errorHandler, limiter } from './infrastructure/app.middleware';
 import { evaluationRouter } from '../modules/evaluations/infrastructure/http-api/evaluation.router';
+import { questionRouter } from '../modules/questions/infrastructure/http-api/question.router';
+import { reportRouter } from '../modules/reports/infrastructure/report.router';
+import { authRouter } from '../modules/auth/infrastructure/auth.router';
 
 export class Server {
     private app: Express;
@@ -41,6 +44,8 @@ export class Server {
             },
         );
 
+        this.app.use(limiter)
+
         this.app.use(express.static(this.publicPath));
         this.app.use(express.urlencoded({ extended: true, limit: '5120mb' }));
         this.app.use(express.json({ limit: '5120mb' }));
@@ -58,8 +63,11 @@ export class Server {
     private routes() {
         this.app.use('/api/v1/doc', serve, setup(swaggerSpecs));
         // ToDo: agregamos las rutas de la app aquí
+        this.app.use('/api/v1/auth', authRouter);
         this.app.use('/api/v1/employees', userRouter);
         this.app.use('/api/v1/evaluations', evaluationRouter);
+        this.app.use('/api/v1/questions', questionRouter);
+        this.app.use('/api/v1/reports', reportRouter);
 
         // !VALIDACIÓN DE ERRORES
         this.app.use(errorHandler)
