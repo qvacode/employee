@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UserUseCases } from '../../application/user.use-cases';
-import { ValidationError } from 'joi';
 import { UserSchemaValidator } from './user.schema-validator';
+import { SchemaValidator } from '../../../../common/infrastructure/schema-validator';
 
 export class UserController {
     constructor(private readonly userUseCases: UserUseCases) {}
@@ -29,7 +29,7 @@ export class UserController {
     public findById = async (req: Request, res: Response) => {
         const { id } = req.params;
 
-        UserSchemaValidator.isUUID(id);
+        SchemaValidator.isUUID(id);
         const user = await this.userUseCases.findById(id);
 
         return res.status(200).json(user);

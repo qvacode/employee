@@ -13,6 +13,11 @@ export class UserInMemoryRepository implements UserRepository {
         return user || null;
     }
 
+    public async findByEmail(email: string): Promise<UserPrimitiveData | null> {
+        const user = this.users.find((user) => user.email === email);
+        return user || null;
+    }
+
     public async findAll(): Promise<UserPrimitiveData[] | []> {
         return this.users;
     }
