@@ -34,3 +34,7 @@ export function authorizeRoles(allowedRoles: UserRole[]) {
         }
     };
 }
+
+export const onlyAdmin = () => authorizeRoles([UserRole.ADMIN])
+export const onlyManager = () => authorizeRoles([UserRole.MANAGER])
+export const adminAndManager = () => authorizeRoles([UserRole.ADMIN, UserRole.MANAGER])
