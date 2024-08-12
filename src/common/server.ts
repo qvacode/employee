@@ -12,6 +12,7 @@ import { questionRouter } from '../modules/questions/infrastructure/http-api/que
 import { reportRouter } from '../modules/reports/infrastructure/report.router';
 import { authRouter } from '../modules/auth/infrastructure/auth.router';
 import { eventListener } from './infrastructure/events/listener';
+import { seedUsers } from './infrastructure/seeders/user.seeder';
 
 export class Server {
     private app: Express;
@@ -80,6 +81,7 @@ export class Server {
             console.info(`📑 -->> Server Docs: http://localhost:${Server.port}/api/v1/doc`);
 
             eventListener()
+            await seedUsers()
         });
     }
 
