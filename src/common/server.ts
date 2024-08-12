@@ -13,6 +13,7 @@ import { reportRouter } from '../modules/reports/infrastructure/report.router';
 import { authRouter } from '../modules/auth/infrastructure/auth.router';
 import { eventListener } from './infrastructure/events/listener';
 import { seedUsers } from './infrastructure/seeders/user.seeder';
+import { dbConnect } from '../config/mongodb.config';
 
 export class Server {
     private app: Express;
@@ -77,6 +78,10 @@ export class Server {
 
     async listen(): Promise<void> {
         this.httpServer.listen(Server.port, async () => {
+            dbConnect()
+                .then(() => console.log('DB is connect'))
+                .catch(error => console.log(error));
+
             console.log(`🤖 -->> Server on port: ${Server.port}`);
             console.info(`📑 -->> Server Docs: http://localhost:${Server.port}/api/v1/doc`);
 
