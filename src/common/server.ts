@@ -76,10 +76,8 @@ export class Server {
 
     async listen(): Promise<void> {
         this.httpServer.listen(Server.port, async () => {
-            console.log(
-                `🤖 -->> Server on port: ${Server.port}`,
-                `${Server.name}-${this.listen.name}`,
-            );
+            console.log(`🤖 -->> Server on port: ${Server.port}`);
+            console.info(`📑 -->> Server Docs: http://localhost:${Server.port}/api/v1/doc`);
 
             eventListener()
         });

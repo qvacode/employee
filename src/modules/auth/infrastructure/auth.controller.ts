@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
+
 import { AuthUseCases } from "../application/auth.use-cases";
 import { LoginUserDto, RegisterUserDto } from "../domain/auth.entity";
 import { AuthSchemaValidator } from "./auth.schema-validator";
-import { CreateUserDto } from "../../users/domain/user.entity";
 
 export class AuthController {
     constructor(private readonly authUseCases: AuthUseCases) {}
