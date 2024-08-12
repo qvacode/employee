@@ -1,0 +1,205 @@
+openapi: 3.0.0
+info:
+  title: Question API
+  version: 1.0.0
+  description: API para la gestión de preguntas en las evaluaciones.
+
+paths:
+  /api/v1/questions:
+    post:
+      summary: Crear una nueva pregunta
+      tags:
+        - Questions
+      description: Crea una nueva pregunta para una evaluación específica.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuestionDto'
+      responses:
+        '201':
+          description: Pregunta creada con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Error de validación de los datos de entrada.
+        '404':
+          description: Evaluación no encontrada.
+
+    get:
+      summary: Listar todas las preguntas
+      tags:
+        - Questions
+      description: Obtiene una lista de todas las preguntas.
+      responses:
+        '200':
+          description: Lista de preguntas obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/QuestionResponse'
+
+  /api/v1/questions/{id}:
+    get:
+      summary: Obtener pregunta por ID
+      tags:
+        - Questions
+      description: Obtiene los detalles de una pregunta específica mediante su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID de la pregunta
+      responses:
+        '200':
+          description: Pregunta obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: ID no válido.
+        '404':
+          description: Pregunta no encontrada.
+
+  /api/v1/questions/{id}/answer:
+    patch:
+      summary: Responder a una pregunta
+      tags:
+        - Questions
+      description: Envia una respuesta a una pregunta específica.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID de la pregunta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnswerQuestionDto'
+      responses:
+        '200':
+          description: Pregunta respondida con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Error de validación de los datos de entrada o ID no válido.
+        '404':
+          description: Pregunta no encontrada.
+
+  /api/v1/questions/{id}/qualify:
+    patch:
+      summary: Calificar una pregunta
+      tags:
+        - Questions
+      description: Asigna una calificación a una pregunta específica.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID de la pregunta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QualifyQuestionDto'
+      responses:
+        '200':
+          description: Pregunta calificada con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionResponse'
+        '400':
+          description: Error de validación de los datos de entrada o ID no válido.
+        '404':
+          description: Pregunta no encontrada.
+
+components:
+  schemas:
+    CreateQuestionDto:
+      type: object
+      required:
+        - evaluationId
+        - question
+      properties:
+        evaluationId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        question:
+          type: string
+          example: "¿Cuál es el objetivo de la evaluación?"
+
+    AnswerQuestionDto:
+      type: object
+      required:
+        - id
+        - answer
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        answer:
+          type: string
+          example: "El objetivo de la evaluación es medir el desempeño."
+
+    QualifyQuestionDto:
+      type: object
+      required:
+        - id
+        - score
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        score:
+          type: number
+          format: float
+          example: 4.5
+
+    QuestionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+        evaluationId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        question:
+          type: string
+          example: "¿Cuál es el objetivo de la evaluación?"
+        answer:
+          type: string
+          example: "El objetivo de la evaluación es medir el desempeño."
+        score:
+          type: number
+          format: float
+          example: 4.5

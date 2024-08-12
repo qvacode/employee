@@ -1,0 +1,193 @@
+openapi: 3.0.0
+info:
+  title: Evaluation API
+  version: 1.0.0
+  description: API para la gestión de evaluaciones.
+
+paths:
+  /api/v1/evaluations:
+    post:
+      summary: Crear una nueva evaluación
+      tags:
+        - Evaluations
+      description: Crea una nueva evaluación para un usuario.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEvaluationDto'
+      responses:
+        '201':
+          description: Evaluación creada con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+        '400':
+          description: Error de validación de los datos de entrada.
+        '404':
+          description: Usuario no encontrado.
+
+    get:
+      summary: Listar todas las evaluaciones
+      tags:
+        - Evaluations
+      description: Obtiene una lista de todas las evaluaciones.
+      responses:
+        '200':
+          description: Lista de evaluaciones obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EvaluationResponse'
+
+  /api/v1/evaluations/{id}:
+    get:
+      summary: Obtener evaluación por ID
+      tags:
+        - Evaluations
+      description: Obtiene los detalles de una evaluación específica mediante su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID de la evaluación
+      responses:
+        '200':
+          description: Evaluación obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+        '400':
+          description: ID no válido.
+        '404':
+          description: Evaluación no encontrada.
+
+    put:
+      summary: Actualizar evaluación
+      tags:
+        - Evaluations
+      description: Actualiza los detalles de una evaluación específica.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID de la evaluación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEvaluationDto'
+      responses:
+        '200':
+          description: Evaluación actualizada con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+        '400':
+          description: Error de validación de los datos de entrada o ID no válido.
+        '404':
+          description: Evaluación no encontrada.
+
+  /api/v1/evaluations/{id}/submit:
+    post:
+      summary: Enviar evaluación
+      tags:
+        - Evaluations
+      description: Marca una evaluación como completada.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID de la evaluación
+      responses:
+        '200':
+          description: Evaluación enviada con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluationResponse'
+        '400':
+          description: ID no válido.
+        '404':
+          description: Evaluación no encontrada.
+
+components:
+  schemas:
+    CreateEvaluationDto:
+      type: object
+      required:
+        - period
+        - type
+        - userId
+      properties:
+        period:
+          type: string
+          example: '2024-Q1'
+        type:
+          type: string
+          example: 'Annual'
+        userId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+
+    UpdateEvaluationDto:
+      type: object
+      properties:
+        period:
+          type: string
+          example: '2024-Q2'
+        type:
+          type: string
+          example: 'Mid-Year'
+        userId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+
+    EvaluationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+        period:
+          type: string
+          example: '2024-Q1'
+        type:
+          type: string
+          example: 'Annual'
+        userId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        status:
+          type: string
+          example: 'pending'
+        score:
+          type: number
+          example: null
+        evaluator:
+          type: string
+          format: uuid
+          example: null

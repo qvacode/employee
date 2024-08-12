@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Auth API
+  version: 1.0.0
+  description: API para la autenticación de usuarios.
+
+paths:
+  /api/v1/auth/login:
+    post:
+      summary: Iniciar sesión
+      tags:
+        - Auth
+      description: Inicia sesión en la aplicación.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserDto'
+      responses:
+        '200':
+          description: Usuario autenticado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoggedResponse'
+        '400':
+          description: Error de validación de los datos de entrada.
+        '401':
+          description: Credenciales inválidas.
+
+  /api/v1/auth/register:
+    post:
+      summary: Registrar usuario
+      tags: 
+        - Auth
+      description: Registra un nuevo usuario en la aplicación.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDto'
+      responses:
+        '201':
+          description: Usuario registrado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegisteredResponse'
+        '400':
+          description: Error de validación de los datos de entrada.
+
+components:
+  schemas:
+    LoginUserDto:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: strongPassword123
+
+    RegisterUserDto:
+      type: object
+      required:
+        - department
+        - email
+        - name
+        - password
+        - position
+      properties:
+        department:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+        email:
+          type: string
+          format: email
+          example: newuser@example.com
+        name:
+          type: string
+          example: John Doe
+        password:
+          type: string
+          format: password
+          example: strongPassword123
+        position:
+          type: string
+          example: Developer
+
+    UserLoggedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174000
+        email:
+          type: string
+          example: user@example.com
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    UserRegisteredResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426614174001
+        email:
+          type: string
+          example: newuser@example.com
+        name:
+          type: string
+          example: John Doe
+        department:
+          type: string
+          example: IT
+        position:
+          type: string
+          example: Developer

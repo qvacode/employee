@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: Report API
+  version: 1.0.0
+  description: API para la generación de reportes.
+
+paths:
+  /api/v1/reports/department/{department}:
+    get:
+      summary: Crear reporte de departamento
+      tags:
+        - Reports
+      description: Genera un reporte para un departamento específico.
+      parameters:
+        - in: path
+          name: department
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID del departamento para el cual se generará el reporte
+      responses:
+        '200':
+          description: Reporte de departamento generado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentReportResponse'
+        '400':
+          description: ID no válido.
+
+  /api/v1/reports/employee/{id}:
+    get:
+      summary: Crear reporte de usuario
+      tags:
+        - Reports
+      description: Genera un reporte para un usuario específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID del usuario para el cual se generará el reporte
+      responses:
+        '200':
+          description: Reporte de usuario generado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReportResponse'
+        '400':
+          description: ID no válido.
+
+components:
+  schemas:
+    DepartmentReportResponse:
+      type: object
+      properties:
+        departmentId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        users:
+          type: object
+
+    UserReportResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+        name:
+          type: string
+          example: John Snow
+        role:
+          type: string
+          example: manager
+        password:
+          type: string
+          example: strongPassword123
+        status:
+          type: string
+          example: active
+        position:
+          type: string
+          example: Protector of the North
+        department:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001

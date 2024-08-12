@@ -10,7 +10,7 @@ const options = {
                 'API RESTful para un sistema de evaluación 360 grados de empleados remotos en una empresa de desarrollo de aplicaciones.',
         },
     },
-    apis: [`${process.cwd()}/docs/api/*.yml`],
+    apis: [`${process.cwd()}/docs/api/**/*.yml`],
 };
 
 export const swaggerSpecs = swaggerJSDoc(options);

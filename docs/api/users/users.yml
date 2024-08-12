@@ -1,0 +1,221 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+  description: API para la gestión de usuarios.
+
+paths:
+  /api/v1/employees:
+    post:
+      summary: Crear un nuevo usuario
+      tags:
+        - Users
+      description: Crea un nuevo usuario en la aplicación.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: Usuario creado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Error de validación de los datos de entrada.
+
+    get:
+      summary: Listar todos los usuarios
+      tags:
+        - Users
+      description: Obtiene una lista de todos los usuarios.
+      responses:
+        '200':
+          description: Lista de usuarios obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
+
+  /api/v1/employees/{id}:
+    get:
+      summary: Obtener usuario por ID
+      tags:
+        - Users
+      description: Obtiene los detalles de un usuario específico mediante su ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID del usuario
+      responses:
+        '200':
+          description: Usuario obtenido con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: ID no válido.
+        '404':
+          description: Usuario no encontrado.
+
+    put:
+      summary: Actualizar usuario
+      tags:
+        - Users
+      description: Actualiza los detalles de un usuario específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: El ID del usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDto'
+      responses:
+        '200':
+          description: Usuario actualizado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Error de validación de los datos de entrada o ID no válido.
+        '404':
+          description: Usuario no encontrado.
+
+components:
+  schemas:
+    CreateUserDto:
+      type: object
+      required:
+        - name
+        - email
+        - role
+        - password
+        - status
+        - position
+        - department
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        role:
+          type: string
+          enum:
+            - admin
+            - manager
+            - employee
+          example: employee
+        password:
+          type: string
+          format: password
+          example: StrongPassword123
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - removed
+          example: active
+        position:
+          type: string
+          example: Developer
+        department:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+
+    UpdateUserDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        role:
+          type: string
+          enum:
+            - admin
+            - manager
+            - employee
+          example: employee
+        password:
+          type: string
+          format: password
+          example: StrongPassword123
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - removed
+          example: active
+        position:
+          type: string
+          example: Developer
+        department:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        role:
+          type: string
+          enum:
+            - admin
+            - manager
+            - employee
+          example: employee
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - removed
+          example: active
+        position:
+          type: string
+          example: Developer
+        department:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
