@@ -1,6 +1,6 @@
 import { UserUseCases } from '../../src/modules/users/application/user.use-cases';
 import { UserRepository } from '../../src/modules/users/domain/user.repository';
-import { UserInMemoryRepository } from '../../src/modules/users/infrastructure/repositories/in-memory-user.repository';
+import { UserInMemoryRepository } from '../../src/modules/users/infrastructure/repositories/in-memory.repository';
 import { CreateUserDto, UserRole, UserStatus } from '../../src/modules/users/domain/user.entity';
 
 
